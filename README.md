@@ -1,6 +1,6 @@
 # Astra Artillery
 
-> **Jogo web original de artilharia 2D em turnos — v0.2.0**
+> **Original 2D turn-based artillery web game - v0.2.0**
 
 [![Status](https://img.shields.io/badge/status-v0.2.0-green)]()
 [![Next.js](https://img.shields.io/badge/Next.js-15-black)](https://nextjs.org/)
@@ -9,271 +9,287 @@
 [![Tailwind](https://img.shields.io/badge/Tailwind-3.4-38bdf8)](https://tailwindcss.com/)
 [![Tests](https://img.shields.io/badge/tests-246%20passing-brightgreen)]()
 [![Vercel](https://img.shields.io/badge/Deploy-Vercel-black)](https://vercel.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
 
-## Sobre
+## Visao Geral / Overview
 
-**Astra Artillery** é um jogo web original de artilharia em turnos, inspirado no gênero clássico popularizado por jogos como *DDTank*, *Worms* e *Gunbound*.
+**Astra Artillery** e um jogo web original de artilharia em turnos, inspirado no genero classico popularizado por jogos como *DDTank*, *Worms* e *Gunbound*.
 
-> **Importante**: Este é um projeto **original**. Não utiliza assets, código, personagens, nomes ou qualquer propriedade intelectual de jogos existentes.
+**Astra Artillery** is an original turn-based artillery web game, inspired on the classic genre popularized by games like *DDTank*, *Worms* and *Gunbound*.
 
-### Premissa
+> **Importante / Important**: Este e um projeto **original**. Nao utiliza assets, codigo, personagens, nomes ou qualquer propriedade intelectual de jogos existentes.
+> This is an **original** project. It does not use assets, code, characters, names or any intellectual property from existing games.
 
-O mundo de **Astra** era protegido por cristais de energia chamados **Núcleos Astrais**. Após **A Grande Ruptura**, os cristais se espalharam por diferentes regiões. Criaturas e facções disputam essa energia. Uma equipe de jovens aventureiros parte para recuperar os Núcleos antes que uma organização rival os use para controlar as ilhas flutuantes.
+### Premissa / Premise
+
+O mundo de **Astra** era protegido por cristais de energia chamados **Nucleos Astrais**. Apos **A Grande Ruptura**, os cristais se espalharam por diferentes regioes. Criaturas e faccoes disputam essa energia.
+
+The world of **Astra** was protected by energy crystals called **Astral Cores**. After **The Great Rift**, the crystals spread across different regions. Creatures and factions fight for this energy.
 
 ---
 
 ## Gameplay
 
-- **Combate por turnos**: Calcule ângulo, potência e vento
-- **8 personagens únicos**: Kai, Luna, Bolt, Nova, Zephyr, Igneous, Glacis, Aeris — cada um com stats e habilidades únicas
-- **24 fases + 6 boss fights** across 6 regiões temáticas
-- **IA determinística** com 3 níveis de dificuldade
-- **Física arcade**: Trajetória parabólica com vento dinâmico
-- **Habilidades especiais** por personagem com cooldowns
-- **Sistema de terreno** destrutível com deformação dinâmica
-- **Sistema de save**: export/import/backup com validação
-- **i18n**: Português (BR), English, Español
-- **PWA**: instalação offline com update automático
+| Funcionalidade / Feature | Descricao / Description |
+|--------------------------|------------------------|
+| Combate por turnos / Turn-based combat | Calcule angulo, potencia e vento / Calculate angle, power and wind |
+| 8 personagens / 8 characters | Kai, Luna, Bolt, Nova, Zephyr, Igneous, Glacis, Aeris |
+| 24 fases + 6 boss fights | Across 6 thematic regions |
+| IA deterministica / Deterministic AI | 3 niveis de dificuldade / 3 difficulty levels |
+| Fisica arcade / Arcade physics | Trajetoria parabolica com vento dinamico / Parabolic trajectory with dynamic wind |
+| Terreno destrutivel / Destructible terrain | Deformacao dinamica / Dynamic deformation |
+| Save system | Export/import/backup com validacao / with validation |
+| i18n | Portugues (BR), English, Espanol |
+| PWA | Instalacao offline com update automatico / Offline install with auto update |
 
-### Controles
+### Controles / Controls
 
-| Ação | Desktop | Mobile |
-|------|---------|--------|
-| Mover | `A` / `D` ou `←` / `→` | Botões ◀ ▶ |
-| Mirar | `W` / `S` ou `↑` / `↓` | Botões ▲ ▼ |
-| Carregar/Disparar | `Espaço` (segurar/soltar) | Botão 🎯 (touch hold) |
-| Habilidade | `Shift` | Botão ⭐ |
-| Pausar | `ESC` / `P` | Botão ⏸ |
+| Acao / Action | Desktop | Mobile |
+|---------------|---------|--------|
+| Mover / Move | A / D or arrows | Touch buttons |
+| Mirar / Aim | W / S or arrows | Touch buttons |
+| Carregar/Disparar / Charge/Fire | Space (hold/release) | Touch hold |
+| Habilidade / Ability | Shift | Touch button |
+| Pausar / Pause | ESC / P | Touch button |
 
-Gamepad também é suportado via Gamepad API (d-pad, face buttons, start).
+Gamepad tambem suportado via Gamepad API / Gamepad also supported via Gamepad API.
 
 ---
 
-## Arquitetura
+## Arquitetura / Architecture
 
-```
+`
 src/
-├── app/                    # Next.js App Router
-│   ├── page.tsx           # Home/Splash
-│   ├── story/page.tsx     # Introdução narrativa
-│   ├── characters/page.tsx # Seleção de personagem
-│   ├── map/page.tsx       # Seleção de fase
-│   ├── game/page.tsx      # Batalha (Phaser)
-│   ├── arsenal/page.tsx   # Arsenal de projéteis
-│   ├── training/page.tsx  # Modo treino
-│   ├── missions/page.tsx  # Missões semanais
-│   ├── profile/page.tsx   # Perfil do jogador
-│   ├── settings/page.tsx  # Configurações completas
-│   └── about/page.tsx     # Créditos
-├── components/
-│   ├── ui/                # PageTransition, ReduceMotion, UpdateBanner
-│   ├── game/              # HUD, PauseOverlay, ErrorBoundary, mobile controls
-│   ├── loading/           # GameLoader, LoadingScreen, NavigationLoader
-│   └── nav/               # NavMenu responsivo
-├── game/                  # Núcleo Phaser (isolado do React)
-│   ├── config/            # Configurações do jogo
-│   ├── scenes/            # Boot, Preload, Battle, UI
-│   ├── entities/          # Character, Projectile, Terrain
-│   ├── systems/           # Turn, Wind, Damage, AI, Camera, Pause, Weather,
-│   │                      #   Terrain, Impact, ScreenFlash, Feedback, Rewards
-│   ├── physics/           # Ballistics
-│   ├── characters/        # Registry de personagens
-│   └── ai/                # CPU Player
-├── stores/                # Zustand (gameStore ~2200 linhas)
-├── hooks/                 # usePhaserGame, useGameControls, useI18n, useSWUpdate
-├── i18n/                  # 3 locales, 200+ keys
-├── types/                 # TypeScript definitions
-└── utils/                 # audio, fullscreen, gamepad, graphicsQuality, storage, math
-```
+  app/                    # Next.js App Router
+    page.tsx              # Home/Splash
+    story/page.tsx        # Narrative intro
+    characters/page.tsx   # Character selection
+    map/page.tsx          # Stage selection
+    game/page.tsx         # Battle (Phaser)
+    arsenal/page.tsx      # Projectile arsenal
+    training/page.tsx     # Training mode
+    missions/page.tsx     # Weekly missions
+    profile/page.tsx      # Player profile
+    settings/page.tsx     # Full settings
+    about/page.tsx        # Credits
+  components/
+    ui/                   # PageTransition, ReduceMotion, UpdateBanner
+    game/                 # HUD, PauseOverlay, ErrorBoundary, mobile controls
+    loading/              # GameLoader, LoadingScreen, NavigationLoader
+    nav/                  # NavMenu responsivo
+  game/                   # Phaser core (isolated from React)
+    config/               # Game configurations
+    scenes/               # Boot, Preload, Battle, UI
+    entities/             # Character, Projectile, Terrain
+    systems/              # Turn, Wind, Damage, AI, Camera, Pause, Weather,
+                          #   Terrain, Impact, ScreenFlash, Feedback, Rewards
+    physics/              # Ballistics
+    characters/           # Character registry
+    ai/                   # CPU Player
+  stores/                 # Zustand (gameStore ~2200 lines)
+  hooks/                  # usePhaserGame, useGameControls, useI18n, useSWUpdate
+  i18n/                   # 3 locales, 200+ keys
+  types/                  # TypeScript definitions
+  utils/                  # audio, fullscreen, gamepad, graphicsQuality, storage, math
+`
 
-### Separação de Responsabilidades
+### Separacao de Responsabilidades / Responsibility Separation
 
-| Camada | Responsabilidade |
-|--------|------------------|
-| **Next.js** | Páginas, menus, layout, SEO, UI fora do combate |
-| **Phaser** | Game loop, sprites, física, trajetória, colisões, partículas, terreno |
-| **Zustand** | Configurações, progresso, personagem selecionado, estado compartilhado |
-| **React** | Bridge para Phaser, controles mobile, HUD overlay, menus |
-
----
-
-## Stack Tecnológica
-
-- **Next.js 15** (App Router, Server Components)
-- **React 18** + **TypeScript 5**
-- **Phaser 3.88** (Game Engine 2D)
-- **Zustand 5** (Estado global)
-- **Tailwind CSS 3.4** (Estilização)
-- **Vitest 2** (Testes unitários — 246 testes)
-- **Playwright 1.47** (Testes E2E)
-- **ESLint 9** + **Prettier 3** (Qualidade de código)
-- **Vercel** (Deploy)
+| Camada / Layer | Responsabilidade / Responsibility |
+|----------------|----------------------------------|
+| **Next.js** | Paginas, menus, layout, SEO, UI fora do combate / Pages, menus, layout, SEO, UI outside combat |
+| **Phaser** | Game loop, sprites, fisica, trajetoria, colisoes, particulas, terreno / Game loop, sprites, physics, trajectory, collisions, particles, terrain |
+| **Zustand** | Configuracoes, progresso, personagem selecionado, estado compartilhado / Settings, progress, selected character, shared state |
+| **React** | Bridge para Phaser, controles mobile, HUD overlay, menus / Bridge to Phaser, mobile controls, HUD overlay, menus |
 
 ---
 
-## Instalação e Execução
+## Stack Tecnologica / Tech Stack
 
-### Pré-requisitos
+| Tecnologia / Technology | Versao / Version | Uso / Purpose |
+|-------------------------|------------------|---------------|
+| Next.js | 15 (App Router, Server Components) | Framework |
+| React | 18 | UI Library |
+| TypeScript | 5 | Type safety |
+| Phaser | 3.88 | Game Engine 2D |
+| Zustand | 5 | Global state |
+| Tailwind CSS | 3.4 | Styling |
+| Vitest | 2 | Unit tests (246 tests) |
+| Playwright | 1.47 | E2E tests |
+| ESLint | 9 | Linting |
+| Prettier | 3 | Formatting |
+| Vercel | - | Deploy |
+
+---
+
+## Instalacao e Execucao / Setup and Running
+
+### Pre-requisitos / Prerequisites
 
 - Node.js 20+
 - npm 10+
 
 ### Setup
 
-```bash
-# Clonar repositório
-git clone <url-do-repo>
+`ash
+# Clonar repositorio / Clone repository
+git clone <repo-url>
 cd astra-artillery
 
-# Instalar dependências
+# Instalar dependencias / Install dependencies
 npm install
 
-# Instalar browsers do Playwright
+# Instalar browsers do Playwright / Install Playwright browsers
 npx playwright install chromium
 
-# Desenvolvimento
+# Desenvolvimento / Development
 npm run dev
 
-# Build de produção
+# Build de producao / Production build
 npm run build
 
-# Iniciar produção
+# Iniciar producao / Start production
 npm start
-```
+`
 
-### Scripts Disponíveis
+### Scripts Disponiveis / Available Scripts
 
-```bash
-npm run dev          # Servidor de desenvolvimento
-npm run build        # Build para produção
-npm run start        # Servidor de produção
-npm run lint         # ESLint
-npm run typecheck    # TypeScript check
-npm run format       # Prettier write
-npm run format:check # Prettier check
-npm run test         # Vitest (unitários)
-npm run test:watch   # Vitest watch mode
-npm run test:ui      # Vitest UI
-npm run test:coverage # Cobertura de testes
-npm run test:e2e     # Playwright E2E
-npm run test:e2e:ui  # Playwright UI
-```
+| Script | Descricao / Description |
+|--------|------------------------|
+| 
+pm run dev | Servidor de desenvolvimento / Development server |
+| 
+pm run build | Build para producao / Production build |
+| 
+pm run start | Servidor de producao / Production server |
+| 
+pm run lint | ESLint |
+| 
+pm run typecheck | TypeScript check |
+| 
+pm run format | Prettier write |
+| 
+pm run format:check | Prettier check |
+| 
+pm run test | Vitest (unit tests) |
+| 
+pm run test:watch | Vitest watch mode |
+| 
+pm run test:ui | Vitest UI |
+| 
+pm run test:coverage | Test coverage |
+| 
+pm run test:e2e | Playwright E2E |
+| 
+pm run test:e2e:ui | Playwright UI |
 
 ---
 
-## Testes
+## Testes / Tests
 
-### Unitários (Vitest)
+### Unitarios (Vitest)
 
-```bash
-npm run test
-```
-
-246 testes cobrindo:
-- Utilitários matemáticos (`clamp`, `lerp`, `distance`, etc.)
-- Física balística (`calculateTrajectory`, `calculateDamage`, vento)
-- Lógica de personagens e habilidades
-- Dados de recompensas, missões, achievements, Astra Cores
-- Validação de save/load
+246 testes cobrindo / 246 tests covering:
+- Utilitarios matematicos (clamp, lerp, distance, etc.) / Math utilities
+- Fisica balistica (calculateTrajectory, calculateDamage, vento) / Ballistic physics
+- Logica de personagens e habilidades / Character and ability logic
+- Dados de recompensas, missoes, achievements / Reward, mission, achievement data
+- Validacao de save/load / Save/load validation
 
 ### End-to-End (Playwright)
 
-```bash
-npm run test:e2e
-```
-
-Fluxos testados:
-- Home → Iniciar → Seleção personagem → Mapa → Jogo
-- Configurações (toggles, sliders)
-- Sobre (créditos, tecnologias)
+Fluxos testados / Tested flows:
+- Home > Iniciar > Selecao personagem > Mapa > Jogo / Home > Start > Character selection > Map > Game
+- Configuracoes (toggles, sliders) / Settings
+- Sobre (creditos, tecnologias) / About (credits, technologies)
 
 ---
 
-## Build e Deploy
+## Build e Deploy / Build and Deploy
 
-### Vercel (Recomendado)
+### Vercel (Recomendado / Recommended)
 
-1. Conecte o repositório ao Vercel
-2. Configure variáveis de ambiente (se houver)
-3. Deploy automático a cada push na `main`
+1. Conecte o repositorio ao Vercel / Connect repository to Vercel
+2. Configure variaveis de ambiente (se houver) / Configure env vars (if any)
+3. Deploy automatico a cada push na main / Auto deploy on every push to main
 
-```bash
-# Verificações locais antes do deploy
+`ash
+# Verificacoes locais antes do deploy / Local checks before deploy
 npm run lint
 npm run typecheck
 npm run test
 npm run build
-```
+`
 
-### Variáveis de Ambiente
+### Variaveis de Ambiente / Environment Variables
 
-```env
-# .env.local (não commitado)
+`nv
+# .env.local (nao commitado / not committed)
 NEXT_PUBLIC_GAME_VERSION=0.2.0
-```
+`
 
 ---
 
-## Funcionalidades Premium (v0.2.0)
+## Funcionalidades / Features
 
 | Feature | Status |
 |---------|--------|
-| Pausa multi-source (ESC/gamepad/touch) | ✅ |
-| Crossfade de música entre cenas | ✅ |
-| Fullscreen toggle (cross-browser) | ✅ |
-| Gamepad support (Gamepad API) | ✅ |
-| i18n 3 idiomas (PT/EN/ES) | ✅ |
-| Graphics quality (auto/low/medium/high) | ✅ |
-| Save validation + auto-backup | ✅ |
-| ErrorBoundary global no layout | ✅ |
-| Accessibility enforcer (high contrast, large text, reduce motion) | ✅ |
-| PWA update banner | ✅ |
-| CHANGELOG.md + LICENSE (MIT) | ✅ |
+| Pausa multi-source (ESC/gamepad/touch) | v0.2.0 |
+| Crossfade de musica entre cenas / Crossfade between scenes | v0.2.0 |
+| Fullscreen toggle (cross-browser) | v0.2.0 |
+| Gamepad support (Gamepad API) | v0.2.0 |
+| i18n 3 idiomas / 3 languages (PT/EN/ES) | v0.2.0 |
+| Graphics quality (auto/low/medium/high) | v0.2.0 |
+| Save validation + auto-backup | v0.2.0 |
+| ErrorBoundary global no layout | v0.2.0 |
+| Accessibility enforcer (high contrast, large text, reduce motion) | v0.2.0 |
+| PWA update banner | v0.2.0 |
+| CHANGELOG.md + LICENSE (MIT) | v0.2.0 |
 
 ---
 
 ## Roadmap
 
-### MVP (v0.1.0) ✅
+### MVP (v0.1.0)
 - [x] Setup do projeto (Next.js + Phaser + Tooling)
 - [x] Identidade visual (logo, favicon, brand)
-- [x] Loading screen e transições
-- [x] História introdutória
+- [x] Loading screen e transicoes
+- [x] Historia introdutoria
 - [x] 4 personagens com stats e habilidades
-- [x] Seleção de personagem responsiva
+- [x] Selecao de personagem responsiva
 - [x] Phaser bootstrap (Boot, Preload, Battle, UI scenes)
-- [x] 3 arenas estáticas
-- [x] Sistema de turnos com vento dinâmico
+- [x] 3 arenas estaticas
+- [x] Sistema de turnos com vento dinamico
 - [x] Input unificado (teclado + touch)
-- [x] Balística arcade + projétil
-- [x] Colisão, dano, HP, KO
+- [x] Balistica arcade + projetil
+- [x] Colisao, dano, HP, KO
 - [x] Habilidades especiais
 - [x] CPU AI (3 dificuldades)
-- [x] Progressão LocalStorage
-- [x] Áudio (música/SFX toggles)
+- [x] Progressao LocalStorage
+- [x] Audio (music/SFX toggles)
 - [x] Mobile (landscape hint, touch areas 44px+)
 - [x] Acessibilidade (reduce motion, focus visible, ARIA)
-- [x] Testes unitários + E2E
+- [x] Testes unitarios + E2E
 - [x] Build Vercel ready
 
-### Expansão (v0.2.0) ✅
+### Expansao (v0.2.0)
 - [x] 4 novos personagens (Zephyr, Igneous, Glacis, Aeris)
 - [x] 21 novas fases + 6 boss fights
-- [x] 6 regiões temáticas
-- [x] Terreno destrutível
-- [x] Arsenal de projéteis
-- [x] Missões semanais
+- [x] 6 regioes tematicas
+- [x] Terreno destrutivel
+- [x] Arsenal de projeteis
+- [x] Missoes semanais
 - [x] Modo treino
 - [x] Perfil do jogador
 - [x] Sistema de conquistas
 - [x] Astra Cores (habilidades passivas)
 - [x] New Game+
 
-### Premium (v0.2.0 polish) ✅
+### Premium (v0.2.0 polish)
 - [x] Pausa multi-source
-- [x] Crossfade de áudio
+- [x] Crossfade de audio
 - [x] Fullscreen toggle
 - [x] Gamepad support
 - [x] i18n 3 idiomas
@@ -283,39 +299,41 @@ NEXT_PUBLIC_GAME_VERSION=0.2.0
 - [x] Accessibility enforcement
 - [x] PWA update mechanism
 
-### Futuro
+### Futuro / Future
 - [ ] Multiplayer online (PvP, matchmaking)
-- [ ] Mais fases e capítulos
+- [ ] Mais fases e capitulos / More stages and chapters
 - [ ] Leaderboards e rankings
-- [ ] Clãs/Guildas
+- [ ] Clas/Guildas / Clans/Guilds
 - [ ] Replay system
 
 ---
 
-## Licença
+## Licenca / License
 
-MIT License — ver [LICENSE](LICENSE).
+MIT License - ver [LICENSE](LICENSE).
 
-**Todos os direitos reservados à equipe Astra Artillery.**
+**Todos os direitos reservados a equipe Astra Artillery.**
+**All rights reserved to the Astra Artillery team.**
 
-- ✅ Código original
-- ✅ Assets SVG originais
-- ✅ Game design original
-- ✅ Narrativa original
-- ❌ Nenhum asset de terceiros (DDTank, Worms, etc.)
+- Codigo original / Original code
+- Assets SVG originais / Original SVG assets
+- Game design original / Original game design
+- Narrativa original / Original narrative
+- Nenhum asset de terceiros (DDTank, Worms, etc.) / No third-party assets
 
 ---
 
-## Créditos
+## Creditos / Credits
 
-| Função | Autor |
-|--------|-------|
+| Funcao / Role | Autor / Author |
+|---------------|----------------|
 | Game Design | Original |
-| Programação | TypeScript, React, Next.js, Phaser 3 |
+| Programacao / Programming | TypeScript, React, Next.js, Phaser 3 |
 | Arte & UI | SVG Original, CSS/Tailwind |
-| Música & SFX | Placeholders (substituir por originais) |
-| QA & Testes | Vitest (246) + Playwright |
+| Musica & SFX | Placeholders (substituir por originais / replace with originals) |
+| QA & Testes / QA & Tests | Vitest (246) + Playwright |
 
 ---
 
-*Desenvolvido com ❤️ usando tecnologias web modernas*
+*Desenvolvido com amor usando tecnologias web modernas*
+*Built with love using modern web technologies*
